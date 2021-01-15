@@ -3,9 +3,10 @@ import re
 
 #PREPARE FILES 
 
-results = pd.read_csv('QualtricsData_Over60.csv') #your file from qualtrics
+path_to_csv = '' #your file from qualtrics
+results = pd.read_csv(path_to_csv) 
 
-just_data = results.iloc[:,17:] #keep just the row with data
+just_data = results.iloc[:,17:] #keep just the row with data. It depends on the file you obtained!
 just_data #check
 
 just_data = just_data.sort_values(by='Q196_1') #sort the values of the first real question (selected manually and avoiding the example 'pinapple')
