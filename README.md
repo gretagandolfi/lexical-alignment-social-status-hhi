@@ -9,7 +9,7 @@ __Description__
 
 | | preferred |	stdp |	dispreferred |	stdd |
 | --- | --- | --- | --- | --- |
-| 0	| pineapple  0.94 pinapple   0.04 pineappe   0.02 |	0.525	| tropical fruit 0.52 fruit 0.24 spiky fruit 0.06 ananas 0.04 spikey tree 0.02 spikey apple 0.02 spikey 0.02 sour melon  0.02 green and yellow fruit 0.02 anannus 0.02 acidic fruit 0.02 | 0.156 |
+| 0	| pineapple  0.94 <br/> pinapple 0.04 <br/> pineappe  0.02 |	0.525	| tropical fruit 0.52 <br/> fruit 0.24 <br/> spiky fruit 0.06 <br/> ananas 0.04 <br/> spikey tree 0.02 <br/> spikey apple 0.02 <br/> spikey 0.02 <br/> sour melon 0.02 <br/> green and yellow fruit 0.02 <br/> anannus 0.02 <br/> acidic fruit 0.02 | 0.156 |
 
 
 To run the code, just modify this line as you need:
@@ -41,7 +41,7 @@ python target_and_filler_finder.py
   -ds1 path to first file
   -ds2 path to the second file
   -cp criterion for the preferred term (decimal, e.g. 0.7)
-  - cd criterion for the dispreferred term (decimal, e.g. 0.4)
+  -cd criterion for the dispreferred term (decimal, e.g. 0.4)
 ```
 
 For help run:
