@@ -3,7 +3,7 @@
 
 ## Scope
 
-This repository contains the materials needed to run a picture naming-picture matching task.
+This repository contains the materials needed to norm the stimuli for a picture naming-picture matching task.
 
 ## Description
 
@@ -52,6 +52,7 @@ For help run:
 ```
 python target_and_filler_finder.py -h
 ```
+### Examples 
 
 Here some examples of:
 
