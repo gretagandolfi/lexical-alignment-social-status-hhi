@@ -37,7 +37,11 @@ Occasionaly, depending on your needs (the number of stimuli you tested and the n
 To run the code, just modify this line as you need:
 
 ```
-python target_and_filler_finder.py -ds1 path to first file -ds2 path to the second file -cp criterion for the preferred term (decimal, e.g. 0.7) - cd criterion for the dispreferred term (decimal, e.g. 0.4)
+python target_and_filler_finder.py
+  -ds1 path to first file
+  -ds2 path to the second file
+  -cp criterion for the preferred term (decimal, e.g. 0.7)
+  - cd criterion for the dispreferred term (decimal, e.g. 0.4)
 ```
 
 For help run:
