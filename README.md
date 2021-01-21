@@ -1,3 +1,6 @@
+
+# Norming task analysis
+
 __Scope__
 
 This repository contains the materials needed to run a picture naming-picture matching task.
