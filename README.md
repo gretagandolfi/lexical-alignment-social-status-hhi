@@ -73,3 +73,10 @@ Here some examples of:
 | | preferred	| dispreferred |
 | --- | --- | --- |
 | 10| lightbulb 0.44 | light 0.32 |
+
+# Stimuli
+_stimuli.zip_ is a compressed folder containing the __stimuli__ for the experiment. 
+
+In each sub-folder (fillers, targets/set1, targets/set2), you’ll find the list of items’ names (.txt file) and the items’ pictures (.jpg files).
+
+Each set of target contains __16__ items (balanced per acceptability, frequency of use in spontaneous and non-spontaneous naming), for a total of __32__ stimuli, while the subfolder fillers contains __43__ items (used at least 80% of times in spontaneous naming and at most 20% of times in non-spontaneous naming. 
