@@ -43,8 +43,8 @@ To run the code, just modify this line as you need:
 python target_and_filler_finder.py
   -ds1 path to the first file
   -ds2 path to the second file
-  -cp criterion for the preferred term (decimal, e.g. 0.7)
-  -cd criterion for the dispreferred term (decimal, e.g. 0.4)
+  -cp criterion for the preferred term (decimal, e.g. 0.8)
+  -cd criterion for the dispreferred term (decimal, e.g. 0.2)
 ```
 
 For help run:
@@ -79,4 +79,4 @@ _stimuli.zip_ is a compressed folder containing the __stimuli__ for the experime
 
 In each sub-folder (fillers, targets/set1, targets/set2), you’ll find the list of items’ names (.txt file) and the items’ pictures (.jpg files).
 
-Each set of target contains __15__ items (balanced per acceptability, frequency of use in spontaneous and non-spontaneous naming), for a total of __30__ stimuli, while the subfolder fillers contains __43__ items (used at least 80% of times in spontaneous naming and at most 20% of times in non-spontaneous naming). 
+Each set of target contains __16__ items (balanced per acceptability, frequency of use in spontaneous and non-spontaneous naming), for a total of __32__ stimuli, while the subfolder fillers contains __43__ items (used at least 80% of times in spontaneous naming and at most 20% of times in non-spontaneous naming). 
