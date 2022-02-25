@@ -29,10 +29,10 @@ python analyse_norming.py -h
 Occasionally, depending on your needs (the number of stimuli you tested and the number of questions related to participants identity you asked), you will need to modify the script. To help you with this, the lines of code that you are supposed to modify are commented (_#MODIFY_).
 
 * __target_and_filler_finder.py__ is a python script that takes as _input_ the files obtained by analyse_norming.py and two thresholds (one for the preferred terms and one for the dispreferred terms). It gives, as _output_, three .csv files:
-  - potential fillers file containing the stimuli for which :
+  - potential targets file containing the stimuli for which :
     * the most frequently used preferred term is above or equal to the preferred threshold
     * the most frequently used dispreferred term is the above the dispreferred threshold.
-  - potential targets file containing the stimuli for which :
+  - potential fillers file containing the stimuli for which :
     * the most frequently used preferred term is above or equal to the preferred threshold
     * the most frequently used dispreferred term is the below the dispreferred threshold.
   - others file containing the stimuli that did not satisfy the above-mentioned rules. These are the stimuli for which the distinction between first and second word choice is blurred.
