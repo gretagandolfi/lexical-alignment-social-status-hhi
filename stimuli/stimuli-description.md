@@ -1,11 +1,11 @@
 
-# Norming task analysis
+## Norming task analysis
 
-## Scope
+### Scope
 
 This repository contains the materials needed to norm the stimuli for a picture naming-picture matching task from an input dataset provided by a Qualtrics survey we designed (click here to have a look: https://edinburgh.eu.qualtrics.com/jfe/form/SV_1Ly0H5K9fEQaf2d).
 
-## Description
+### Description
 
 * __analyse_norming.py__ is a python script that takes as _input_ the results of the norming task in a Qualtrics format. It gives, as an _output_, 2 sets of stimuli in a .csv format (5, n of stimuli). Each stimulus is paired with the words used by the participants to describe it as a first (preferred) or second (dispreferred) choice, its relative percentage and the standard deviation between responses.  
 
@@ -75,7 +75,7 @@ Here some examples of:
 | --- | --- | --- |
 | 10| lightbulb 0.44 | light 0.32 |
 
-# Stimuli
+## Stimuli
 _stimuli.zip_ is a compressed folder containing the __stimuli__ for the experiment. 
 
 In each sub-folder (fillers, targets/set1, targets/set2), you’ll find the list of items’ names (.txt file) and the items’ pictures (.jpg files).
