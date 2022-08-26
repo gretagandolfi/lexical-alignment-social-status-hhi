@@ -12,7 +12,7 @@ _____
 
 ### Social status, language use, and context: Insights from lexical entrainment
 
-Greta Gandolfi, Anita Tobar Henríquez & Martin J. Pickering (PPLS, The University of Edinburgh, UK)
+Greta Gandolfi, Anita Tobar Henríquez & Martin J. Pickering 
 
 In dialogue, speakers repeat their interlocutors’ words, for example by using the disfavoured name seat instead of the favoured name chair after their interlocutor used seat to refer to the object in Fig. 1 (i.e. they entrain at the lexical level [1]). While entrainment emerges spontaneously in conversation [2], it can also serve strategic functions. Speakers can entrain to ensure mutual comprehension [3] or to regulate social distance [4]. Sociolinguistic studies suggest that speakers entrain to a greater extent with high social status interlocutors, specifically when interlocutors’ social status is relevant or desirable given the conversational context [5]. However, little is known about how speakers modulate their automatic tendency to entrain and what the role of the context is. 
 In two online experiments, we investigated whether the social status effect on lexical entrainment can be observed in an online and controlled interaction, and whether any such effect is modulated by the saliency of social status information with respect to the context. Experiment 1 investigated the effects of interlocutors’ social status on lexical entrainment. Experiment 2 replicated and extended Experiment 1, further investigating the effect of the saliency of social status on entrainment while using a larger sample size. 
