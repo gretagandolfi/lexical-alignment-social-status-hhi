@@ -7,10 +7,10 @@ This repository contains the materials needed to norm the stimuli for a picture 
 
 ### Description
 
-* __analyse_norming.py__ is a python script that takes as _input_ the results of the norming task in a Qualtrics format. It gives, as an _output_, 2 sets of stimuli in a .csv format (5, n of stimuli). Each stimulus is paired with the words used by the participants to describe it as a first (preferred) or second (dispreferred) choice, its relative percentage and the standard deviation between responses.  
+* __analyse_norming.py__ is a python script that takes as _input_ the results of the norming task in a Qualtrics format. It gives, as an _output_, 2 sets of stimuli in a .csv format (5, n of stimuli). Each stimulus is paired with the words used by the participants to describe it as a first (fav) or second (disfav) choice, its relative percentage and the standard deviation between responses.  
 
 
-| | preferred |	stdp | dispreferred |	std |
+| | fav |	stdp | disfav |	std |
 | --- | --- | --- | --- | --- |
 | 0	| pineapple  0.94 <br/> pinapple 0.04 <br/> pineappe  0.02 |	0.525	| tropical fruit 0.52 <br/> fruit 0.24 <br/> spiky fruit 0.06 <br/> ananas 0.04 <br/> spikey tree 0.02 <br/> spikey apple 0.02 <br/> spikey 0.02 <br/> sour melon 0.02 <br/> green and yellow fruit 0.02 <br/> anannus 0.02 <br/> acidic fruit 0.02 | 0.156 |
 
@@ -59,19 +59,19 @@ Here some examples of:
 
 * a filler stimulus
 
-| | preferred	| dispreferred |
+| | fav	| disfav |
 | --- | --- | --- |
 | 2	| bed 1.0 | mattress 0.12 |
 
 * a target stimulus
 
-| | preferred	| dispreferred |
+| | fav	| disfav |
 | --- | --- | --- |
 | 4	| mug 0.88 |	cup 0.70 |
 
 * other
 
-| | preferred	| dispreferred |
+| | fav	| disfav |
 | --- | --- | --- |
 | 10| lightbulb 0.44 | light 0.32 |
 
@@ -82,7 +82,7 @@ In each sub-folder (fillers, targets/set1, targets/set2), you’ll find the list
 
 Each set of target contains __16__ items (balanced per acceptability, frequency of use in spontaneous and non-spontaneous naming), for a total of __32__ stimuli, while the subfolder fillers contains __43__ items (used at least 80% of times in spontaneous naming and at least 20% of times in non-spontaneous naming). 
 
-|favoured _word	| spostaneous_naming(f)	| constrained_naming(f)	| disfavoured_word |spostaneous_naming(d)	|constrained_naming(d)|	acceptability(d)|
+|fav word	| spostaneous_naming(f)	| constrained_naming(f)	| disfav word |spostaneous_naming(d)	|constrained_naming(d)|	acceptability(d)|
 | --- | --- | --- |  --- | --- | --- | --- |
 |snake 	|100%	|0%	|serpent	|0%	|28%	|6,12|
 |washin machine  |96%	|0%	|clothes washer	|2%	|36%	|6,14|
