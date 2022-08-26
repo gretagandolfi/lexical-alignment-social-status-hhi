@@ -1,2 +1,33 @@
-# social-status-experiment
-experiment1
+This folder contains the additional material to the poster "Social Status, Language Use and Context: Insights from Lexical entrainment", to be presented at AMLaP 2022 (7th-9th September). 
+
+Here is the content of the folder: 
+* __stimuli__ contains the code used to select the experimental stimuli and based on the norming task we ran. 
+*__analysis__ contains an R markdown file with the analysis for both the experiment, and its .pdf version
+*__graphs__ contains all the graphs we used show in the poser, and the code we used to create them (R markdown file and .pdf)
+
+Below an *abstract* of the study:
+
+___Social status, language use, and context: Insights from lexical entrainment__
+
+Greta Gandolfi, Anita Tobar Henríquez & Martin J. Pickering (PPLS, The University of Edinburgh, UK)
+
+Contact author's e-mail address: greta.gandolfi@ed.ac.uk
+
+In dialogue, speakers repeat their interlocutors’ words, for example by using the disfavoured name seat instead of the favoured name chair after their interlocutor used seat to refer to the object in Fig. 1 (i.e. they entrain at the lexical level [1]). While entrainment emerges spontaneously in conversation [2], it can also serve strategic functions. Speakers can entrain to ensure mutual comprehension [3] or to regulate social distance [4]. Sociolinguistic studies suggest that speakers entrain to a greater extent with high social status interlocutors, specifically when interlocutors’ social status is relevant or desirable given the conversational context [5]. However, little is known about how speakers modulate their automatic tendency to entrain and what the role of the context is. 
+In two online experiments, we investigated whether the social status effect on lexical entrainment can be observed in an online and controlled interaction, and whether any such effect is modulated by the saliency of social status information with respect to the context. Experiment 1 investigated the effects of interlocutors’ social status on lexical entrainment. Experiment 2 replicated and extended Experiment 1, further investigating the effect of the saliency of social status on entrainment while using a larger sample size. 
+In Experiment 1 (2x2 within-participants design), 240 British English native speakers (18-30 y.o., living in the UK, 120 female) played two sessions of a picture-naming task with a (scripted, computerised) “interlocutor” (Fig.1). Importantly, participants believed that they played with a different human interlocutor in each session. We manipulated participants’ beliefs about their interlocutors’ social status by introducing them with a written description and picture. Descriptions and pictures were selected on the basis of a pre-test, where we asked participants to rate the social status of 10 fictional characters on a scale from 1 to 7. We selected the ones at the ends of the spectrum. Experimental stimuli comprised 32 objects (16 per session) that have both a disfavoured and favoured name in British English (e.g., seat vs chair). Entrainment was measured by the proportion of stimuli for which participants used the same disfavoured name that the interlocutor had used before (using seat after the “interlocutor” used seat). As a manipulation check, we asked participants to rate the social status of their interlocutor after the main task, on a scale from 1 to 7. In Experiment 2 (3x2 mixed design), 480 native speakers of British English (18-30 y.o., living in the UK, 240 female) completed the same picture-naming task used in Experiment 1 in two sessions. We manipulated both the partner’s social status and the saliency of the social status information: half of the participants rated the social status of their interlocutor before the main task (thus raising its saliency), while the other group rated the social status of their interlocutor after the main task. 
+	In Experiment 1, participants entrained on 25% and 26% of trials when they thought they interacted with the low social status interlocutor and with the high social status interlocutor respectively (p = .09). Interestingly, Experiment 2 revealed an interaction between the rating question position and interlocutors’ social status (p < .01): participants who were asked to rate the social status of their interlocutor before the main task were more likely to entrain with their high social status interlocutor than with their low social status interlocutor, respectively on 24% and 21% of the trials, while participants who were asked to rate their interlocutor social status after the main task entrained to a similar extent (25% of trials) with high and low social status interlocutors, thus replicating Experiment 1 results. In both the experiments, participants entrained more often in the first than in the second session (p < .01). See Fig. 2. 
+	In summary, we manipulated two variables: participants’ beliefs about their interlocutors’ social status and the saliency of the social status information. We found that interlocutors’ social status affects lexical entrainment, but only when the social status information is sufficiently salient. While we still need further research to disentangle the role of automatic and context-sensitive components of lexical entrainment, we propose that the social status effect we found can be explained in terms of attention [6]. On the one hand, high social status interlocutors attract more attention than low social status interlocutors [7,8], on the other, attention towards one’s behaviour allows deeper processing of their lexical choices thus enhancing lexical entrainment. 
+References
+ 
+1.	Branigan HP, Pickering MJ, Pearson J, McLean JF, Brown A. 2011 The role of beliefs in lexical alignment: Evidence from dialogs with humans and computers. Cognition 121, 41–57. (doi:10.1016/j.cognition.2011.05.011)
+2.	Pickering MJ, Garrod S. 2004 Toward a mechanistic psychology of dialogue. Behav. Brain Sci. 27. (doi:10.1017/S0140525X04000056)
+3.	Brennan SE, Clark HH. 1996 Conceptual pacts and lexical choice in conversation. J. Exp. Psychol. Learn. Mem. Cogn. 22, 1482–1493. (doi:10.1037/0278-7393.22.6.1482)
+4.	Giles H, Powesland PF. 1975 Speech style and social evaluation. Oxford,  England: Academic Press. 
+5.	Danescu-Niculescu-Mizil C, Lee L, Pang B, Kleinberg J. 2012 Echoes of power: Language effects and power differences in social interaction. ArXiv11123670 Phys. 
+6.	Ivanova I, Horton WS, Swets B, Kleinman D, Ferreira VS. 2020 Structural alignment in dialogue and monologue (and what attention may have to do with it). J. Mem. Lang. 110, 104052. (doi:10.1016/j.jml.2019.104052)
+7.	Dalmaso M, Pavan G, Castelli L, Galfano G. 2012 Social status gates social attention in humans. Biol. Lett. 8, 450–452. (doi:10.1098/rsbl.2011.0881)
+8.	Mattan BD, Kubota JT, Cloutier J. 2017 How Social Status Shapes Person Perception and Evaluation: A Social Neuroscience Perspective. Perspect. Psychol. Sci. 12, 468–507. (doi:10.1177/1745691616677828)
+
+You can find Experiment 2 preregistration here: https://osf.io/dnkmj
+
