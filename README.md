@@ -10,7 +10,7 @@ _____
 
 ## Abstract
 
-###Social status, language use, and context: Insights from lexical entrainment
+### Social status, language use, and context: Insights from lexical entrainment
 
 Greta Gandolfi, Anita Tobar Henríquez & Martin J. Pickering (PPLS, The University of Edinburgh, UK)
 
