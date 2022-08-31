@@ -1,0 +1,182 @@
+---
+title: 'Social Status, Language Use, and Context: Insights from Lexical Entrainment'
+author: "Greta Gandolfi"
+date: "07.09.2022"
+output:
+  html_document:
+    df_print: paged
+---
+
+First, I import all the packages I need.
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#import all the packages
+library(lme4)
+library(MASS)
+library(lmerTest)
+library(Rmisc)
+library(ggplot2)
+library(plyr)
+library(gdata)
+library(sjPlot)
+library(dplyr)
+library(effects)
+library(sjPlot)
+library(lattice)
+library(psych)
+library(knitr)
+```
+Then I import an anonymised version of the dataset. 
+```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+#import data
+d0 <- read.csv("/Users/gretagandolfi/Desktop/OneDrive - University of Edinburgh/ESR6/0DONE/_STUDY1/overall-analysis-DEF-FILES/social-status-experiments2.csv", sep=",") 
+
+d0$disfavoured.word <- as.factor(as.character(d0$disfavoured.word))
+d0$participantID <- as.factor(as.character(d0$participantID))
+d0$group <- as.factor(as.character(d0$group))
+d0$session.order <- as.factor(as.character(d0$session.order))
+d0$interlocutor.SES <- as.factor(as.character(d0$interlocutor.SES))
+
+#count the excluded participants
+participants.count <- d0 %>%
+  dplyr::group_by(experiment) %>%
+  dplyr::summarise(N = n()/32)
+
+participants.excluded.exp1 <- 100-(participants.count$N[1]*100/240)
+participants.excluded.exp2 <- 100-(participants.count$N[2]*100/480)
+```
+
+We excluded participants that failed the manipulation check, i.e. `r participants.excluded.exp1`% in the first experiment and `r  participants.excluded.exp2`% in the second experiment.
+
+### Analysis
+**Do pariticipants entrain?**
+
+```{r message=FALSE, warning=FALSE}
+#EXP1
+entrainbyitem_total.exp1 <- d0 %>%
+  filter(experiment == "experiment 1") %>%
+  dplyr::group_by(disfavoured.word, f) %>%
+  dplyr::summarise(entrainbyitem = sum(as.numeric(as.character(entrained)), na.rm = TRUE)/participants.count$N[1])
+
+wt.exp1 <- wilcox.test(as.numeric(entrainbyitem_total.exp1$f), 
+            as.numeric(entrainbyitem_total.exp1$entrainbyitem), 
+            paired=TRUE, 
+            exact = FALSE)
+#EXP2
+entrainbyitem_total.exp2 <- d0 %>%
+  filter(experiment == "experiment 2") %>%
+  dplyr::group_by(disfavoured.word, f) %>%
+  dplyr::summarise(entrainbyitem = sum(as.numeric(as.character(entrained)), na.rm = TRUE)/participants.count$N[1])
+
+wt.exp2 <- wilcox.test(as.numeric(entrainbyitem_total.exp2$f), 
+            as.numeric(entrainbyitem_total.exp2$entrainbyitem), 
+            paired=TRUE, 
+            exact = FALSE)
+#any(entrainbyitem_total.exp2$f>entrainbyitem_total.exp2$entrainbyitem) to understand what V=0 means.
+```
+
+Yes, in both the experiments. `f` corresponds to the frequency of the word (here in `disfavoured.word`) in the norming task (spontaneous naming). Participants were asked to answer the question *“What is the first word you would use to name this object?"*, where *"this object"* referred to a picture they could see on the same page, while  `entrainbyitem` corresponds to the frequency of the word in the picture naming picture matching task. In the norming task (spontaneous naming), words in  `disfavoured.word` were used `r round(mean(entrainbyitem_total.exp2$f)*100, digits=2)`% of the trials. While, in the picture naming tasks, words in `disfavoured.word` were used `r round(mean(entrainbyitem_total.exp1$entrainbyitem)*100, digits=2)`% of trials in experiment 1 (p<.001) and `r round(mean(entrainbyitem_total.exp1$entrainbyitem)*100, digits=2)`% of trials in experiment 2 (p<.001).
+
+----
+
+**Do participants entrain more often with high status interlocutors?**
+```{r}
+#number of repetitions per participant 
+d.exp1 <- d0 %>%
+  filter(experiment == "experiment 1")
+
+f.1=ftable(d.exp1$interlocutor.SES, d.exp1$entrained)
+
+# percentage of repetitions/non-repetitions per condition
+round(100*prop.table(f.1, 1), digits = 2)
+```
+In experiment 1, participants entrained with high social status interlocutors on `r round(100*prop.table(f.1, 1), digits = 2)[3]`% of the trials and with low social status interlocutors on `r round(100*prop.table(f.1, 1), digits = 2)[4]`% of the trials.
+
+```{r}
+#number of repetitions per participant 
+d.exp2 <- d0 %>%
+  filter(experiment == "experiment 2")
+
+f.2=ftable(d.exp2$group, d.exp2$interlocutor.SES, d.exp2$entrained)
+
+# percentage of repetitions/non-repetitions per condition
+round(100*prop.table(f.2, 1), digits = 2)
+```
+In experiment 2, participants entrained with high social status interlocutors on `r round(100*prop.table(f.2, 1), digits = 2)[5]`% of the trials and with low social status interlocutors on `r round(100*prop.table(f.2, 1), digits = 2)[6]`% of the trials. However, if they were asked to rate the social status of their interlocutor before the main task, they entrained respectively on `r round(100*prop.table(f.2, 1), digits = 2)[7]`% of the trials and `r round(100*prop.table(f.2, 1), digits = 2)[8]`% of the trials. 
+
+---
+
+**Is any difference statistically significant?**
+```{r}
+contrasts(d.exp1$interlocutor.SES) <- c(0.5,-0.5) # changed contrast to effect coding
+
+#m1.0 <- glmer(entrained~interlocutor.SES+(1 + interlocutor.SES|participantID)+(1 + interlocutor.SES|disfavoured.word), data =d.exp1, family ="binomial")  boundary (singular) fit: see ?isSingular
+
+#m1.1 <- glmer(entrained~interlocutor.SES+(1 + interlocutor.SES|participantID)+(1 + interlocutor.SES||disfavoured.word), data =d.exp1, family ="binomial") boundary (singular) fit: see ?isSingular 
+
+m1.2 <- glmer(entrained~interlocutor.SES+(1 + interlocutor.SES|participantID)+(1|disfavoured.word), data =d.exp1, family ="binomial")
+summary(m1.2)
+
+```
+
+```{r}
+contrasts(d.exp2$interlocutor.SES) <- c(0.5,-0.5) 
+contrasts(d.exp2$group) <- c(-0.5,0.5) 
+contrasts(d.exp2$session.order) <- c(0.5,-0.5) 
+
+m3 <- glmer(entrained ~ interlocutor.SES*group+session.order+(1+interlocutor.SES|participantID)+(1|disfavoured.word), data = d.exp2, family ="binomial")
+summary(m3)
+```
+In Experiment 1, participants seem to align to high and low social status interlocutors to the same extent  (p = .09). Interestingly, Experiment 2 revealed an interaction between the rating question position and interlocutors’ social status (p < .01): participants who were asked to rate the social status of their interlocutor before the main task were more likely to entrain with their high social status interlocutor than with their low social status interlocutor, while participants who were asked to rate their interlocutor social status after the main task entrained to a similar extent (25% of trials) with high and low social status interlocutors, thus replicating Experiment 1 results. In both the experiments, participants entrained more often in the first than in the second session (p < .01). 
+
+### Visualisation
+**Main Findings**
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#grouping the data 
+vis0 <- d0 %>%
+  dplyr::group_by(experiment, interlocutor.SES, group) %>%
+  dplyr::summarise(entrainment.m = mean(entrained)*100,
+                   entrainment.sd = sd(entrained)*100,
+                   N = n(),
+                   entrainment.se = entrainment.sd/sqrt(n()))
+
+
+
+main.plot <- ggplot(vis0, aes(x=group, y=entrainment.m, fill=interlocutor.SES)) +
+  labs(title="Does interlocutors' social status modulate lexical entrainment?", subtitle="Yes, but only when participants rate the social status of their interlocutor before the main task", y="proportion of lexical entrainment (%)", x="rating position") +
+  ylim(0, 50) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5),
+  plot.subtitle = element_text(hjust = 0.5)) +
+  scale_fill_manual(values=c("#333399", "#d0d2ef"), name = "social status", labels = c("high", "low")) +
+  facet_grid(cols=vars(experiment)) +
+  geom_bar(stat = "identity",position = "dodge", width = .5, alpha=.6) +
+  theme(legend.position="bottom") +
+  geom_errorbar(aes(ymax=entrainment.m+entrainment.se,ymin=entrainment.m-entrainment.se, width=.2), position=position_dodge(.5)) 
+
+#ggsave("plot-amlap-bar.jpg", width = 8, height = 6)
+```
+
+---
+
+**Additional findings: Attention (Session Order)**
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+vis1 <- d0 %>%
+  dplyr::group_by(experiment, session.order) %>%
+  dplyr::summarise(entrainment.m = mean(entrained)*100,
+                   entrainment.sd = sd(entrained)*100,
+                   N = n(),
+                   entrainment.se = entrainment.sd/sqrt(n()))
+
+plot.order <- ggplot(vis1, aes(x=experiment, y=entrainment.m, fill=session.order)) +
+  labs(title="Lexical entrainment decreases over time", y="proportion of lexical entrainment (%)", x="experiment") +
+  ylim(0, 50) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_fill_manual(values=c("#dbedef", "#2aa6af"), name="session order", labels =c("first", "second")) +
+  geom_bar(stat = "identity",position = "dodge", width = .5, alpha=.6) +
+   theme(legend.position="bottom") +
+  geom_errorbar(aes(ymax=entrainment.m+entrainment.se,ymin=entrainment.m-entrainment.se, width=.2), position=position_dodge(.5)) 
+#ggsave("plot-order-amlap-bar.jpg", width = 5, height = 5)
+```
+
+Images can be found in the current folder.
