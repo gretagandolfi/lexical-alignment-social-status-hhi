@@ -3,8 +3,8 @@ This folder contains the additional material to the poster "Social Status, Langu
 
 Here is the content of the folder: 
 * __stimuli__ contains the code used to select the experimental stimuli and based on the norming task we ran. 
-* __analysis__ contains an R markdown file with the analysis for both the experiment, and its .pdf version
-* __graphs__ contains all the graphs we used show in the poser, and the code we used to create them (R markdown file and .pdf)
+* __analysis__ contains an R markdown file with the analysis for both the experiment and graphs pictures
+* __bonus figures__ contains extra graphs pictures and their code (R markdown file)
 
 _____
 
