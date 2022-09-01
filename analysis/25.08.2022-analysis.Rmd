@@ -32,7 +32,7 @@ library(tidyr)
 Then I import an anonymised version of the dataset. 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
 #import data
-d0 <- read.csv("/Users/gretagandolfi/Desktop/OneDrive - University of Edinburgh/ESR6/0DONE/_STUDY1/overall-analysis-DEF-FILES/social-status-experiments2.csv", sep=",") 
+d0 <- read.csv("/Users/gretagandolfi/Desktop/OneDrive - University of Edinburgh/ESR6/0DONE/_STUDY1/overall-analysis-DEF-FILES/social-status-experiments.csv", sep=",") 
 
 d0$disfavoured.word <- as.factor(as.character(d0$disfavoured.word))
 d0$participantID <- as.factor(as.character(d0$participantID))
