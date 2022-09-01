@@ -24,6 +24,10 @@ library(sjPlot)
 library(lattice)
 library(psych)
 library(knitr)
+library(sjmisc)
+library(sjlabelled)
+library(tidyr)
+
 ```
 Then I import an anonymised version of the dataset. 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -109,13 +113,15 @@ In experiment 2, participants entrained with high social status interlocutors on
 ```{r}
 contrasts(d.exp1$interlocutor.SES) <- c(0.5,-0.5) # changed contrast to effect coding
 
-#m1.0 <- glmer(entrained~interlocutor.SES+(1 + interlocutor.SES|participantID)+(1 + interlocutor.SES|disfavoured.word), data =d.exp1, family ="binomial")  boundary (singular) fit: see ?isSingular
+m0.1 <- glmer(entrained~1+(1+interlocutor.SES|participantID)+(1+interlocutor.SES|disfavoured.word), data =d.exp1, family ="binomial")
+summary(m0.1)$varcor #(1+interlocutor.SES|disfavoured.word) corr=1
+m0.1.1 <- glmer(entrained~1+(1+interlocutor.SES|participantID)+(1|disfavoured.word), data =d.exp1, family ="binomial")
+summary(m0.1.1)$varcor
+m1.1 <- glmer(entrained~interlocutor.SES+(1+interlocutor.SES|participantID)+(1|disfavoured.word), data =d.exp1, family ="binomial")
+anova(m0.1.1,m1.1) #adding the interlocutor.SES doesn't really explain the data better thn m0.1.1
 
-#m1.1 <- glmer(entrained~interlocutor.SES+(1 + interlocutor.SES|participantID)+(1 + interlocutor.SES||disfavoured.word), data =d.exp1, family ="binomial") boundary (singular) fit: see ?isSingular 
-
-m1.2 <- glmer(entrained~interlocutor.SES+(1 + interlocutor.SES|participantID)+(1|disfavoured.word), data =d.exp1, family ="binomial")
-summary(m1.2)
-
+summary(m1.1)
+plot_model(m1.1)
 ```
 
 ```{r}
@@ -123,8 +129,16 @@ contrasts(d.exp2$interlocutor.SES) <- c(0.5,-0.5)
 contrasts(d.exp2$group) <- c(-0.5,0.5) 
 contrasts(d.exp2$session.order) <- c(0.5,-0.5) 
 
-m3 <- glmer(entrained ~ interlocutor.SES*group+session.order+(1+interlocutor.SES|participantID)+(1|disfavoured.word), data = d.exp2, family ="binomial")
-summary(m3)
+m0.2 <- glmer(entrained ~ 1 +(1+interlocutor.SES|participantID)+(1|disfavoured.word), data = d.exp2, family ="binomial")
+m1.2 <- glmer(entrained ~ interlocutor.SES +(1+interlocutor.SES|participantID)+(1|disfavoured.word), data = d.exp2, family ="binomial")
+m2.2 <- glmer(entrained ~ interlocutor.SES*group +(1+interlocutor.SES|participantID)+(1|disfavoured.word), data = d.exp2, family ="binomial")
+#m3.2 <- glmer(entrained ~ interlocutor.SES*group*session.order+(1+interlocutor.SES|participantID)+(1|disfavoured.word), data = d.exp2, family ="binomial") failed to converge
+m3.2 <- glmer(entrained ~ interlocutor.SES*group+session.order+(1+interlocutor.SES|participantID)+(1|disfavoured.word), data = d.exp2, family ="binomial")
+
+anova(m0.2,m1.2,m2.2,m3.2)
+
+summary(m3.2)
+plot_model(m3.2)
 ```
 In Experiment 1, participants seem to align to high and low social status interlocutors to the same extent  (p = .09). Interestingly, Experiment 2 revealed an interaction between the rating question position and interlocutors’ social status (p < .01): participants who were asked to rate the social status of their interlocutor before the main task were more likely to entrain with their high social status interlocutor than with their low social status interlocutor, while participants who were asked to rate their interlocutor social status after the main task entrained to a similar extent (25% of trials) with high and low social status interlocutors, thus replicating Experiment 1 results. In both the experiments, participants entrained more often in the first than in the second session (p < .01). 
 
@@ -180,3 +194,4 @@ plot.order <- ggplot(vis1, aes(x=experiment, y=entrainment.m, fill=session.order
 ```
 
 Images can be found in the current folder.
+

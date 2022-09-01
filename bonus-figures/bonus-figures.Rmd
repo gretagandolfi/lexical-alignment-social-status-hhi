@@ -1,0 +1,74 @@
+---
+title: "Other Visualisations"
+output: html_notebook
+---
+Here some additional figures, that can help to visualise the distribution of the data.
+```{r}
+library(lme4)
+library(MASS)
+library(lmerTest)
+library(Rmisc)
+library(ggplot2)
+library(plyr)
+library(gdata)
+library(sjPlot)
+library(dplyr)
+library(effects)
+
+d0 <- read.csv("/Users/gretagandolfi/Desktop/OneDrive - University of Edinburgh/ESR6/0DONE/_STUDY1/overall-analysis-DEF-FILES/social-status-experiments2.csv", sep=",") 
+
+d0$disfavoured.word <- as.factor(as.character(d0$disfavoured.word))
+d0$participantID <- as.factor(as.character(d0$participantID))
+d0$group <- as.factor(as.character(d0$group))
+d0$session.order <- as.factor(as.character(d0$session.order))
+d0$interlocutor.SES <- as.factor(as.character(d0$interlocutor.SES))
+
+#main plot
+v2 <- d0 %>%
+  dplyr::group_by(experiment, interlocutor.SES, group, participantID) %>%
+  dplyr::summarise(entrainment.m = mean(entrained)*100,
+                   entrainment.sd = sd(entrained)*100,
+                   N = n(),
+                   entrainment.se = entrainment.sd/sqrt(n()))
+```
+
+```{r}
+violin.plot <- ggplot(v2, aes(x=group, y=entrainment.m, line=interlocutor.SES)) + 
+  geom_violin(trim=TRUE,position=position_dodge(.5), aes(fill=social.status), alpha=.5)+
+  labs(title="Lexical entrainment ~ Social status (* Rating Position)", y="Proportion of lexical entrainment (%)", x="Rating position") +
+  scale_fill_manual(values=c("#333399", "#d0d2ef"), name = "Social Status", labels = c("High", "Low")) +
+  geom_boxplot(width=0.1, position=position_dodge(.5), outlier.shape = NA, fatten = NULL)+
+  facet_grid(rows=vars(experiment))+
+  stat_summary(fun = mean, geom = "errorbar", aes(ymax = ..y.., ymin = ..y..),
+               width = 0.1, size = 0.8, linetype = "solid",
+               position = position_dodge(width = .5), col="black") + 
+    theme_classic()
+
+#ggsave("violin-plot-amlap.jpg", width = 6, height = 4)
+
+#order plot
+#order
+d0$session.order <- as.character(d0$session.order)
+v3<- d0 %>%
+  dplyr::group_by(experiment, session.order, participantID) %>%
+  dplyr::summarise(entrainment.m = mean(entrained)*100,
+                   entrainment.sd = sd(entrained)*100,
+                   N = n(),
+                   entrainment.se = entrainment.sd/sqrt(n()))
+
+
+violin.plot.order <- ggplot(v3, aes(x=session.order, y=entrainment.m, line=session.order)) + 
+  geom_violin(trim=TRUE,position=position_dodge(.5), aes(fill=order), alpha=.5)+
+  labs(title="Lexical entrainment ~ Session", y="Proportion of lexical entrainment (%)", x="Session") +
+  scale_fill_manual(values=c("#dbedef", "#2aa6af"),  name = "Order", labels = c("First session", "Second session")) +
+  geom_boxplot(width=0.1, position=position_dodge(.5), outlier.shape = NA, fatten = NULL)+
+  facet_grid(cols = vars(experiment))+
+  stat_summary(fun = mean, geom = "errorbar", aes(ymax = ..y.., ymin = ..y..),
+               width = 0.1, size = 0.8, linetype = "solid",
+               position = position_dodge(width = .5), col="black") + theme_classic()
+
+
+#ggsave("violin-plot-order-amlap.jpg", width = 6, height = 4)
+```
+
+
