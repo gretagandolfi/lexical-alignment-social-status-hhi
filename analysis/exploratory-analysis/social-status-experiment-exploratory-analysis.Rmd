@@ -1,0 +1,65 @@
+---
+title: "R Notebook"
+output: social-status-experiment-exploratory-analysis
+---
+### Additional Analysis 
+There is an effect of sessions' order (p<0.001). Pariticipants entrain more often in the first than in the second session. Can we see the same pattern within sessions? Does the stimuli order affect entrainment? Is there an effect of attention? is it different across interlocutors?
+
+First it can be useful to visualise the data. 
+```{r}
+d0 <- read.csv("/Users/gretagandolfi/Desktop/OneDrive - University of Edinburgh/ESR6/0DONE/_STUDY1/overall-analysis-DEF-FILES/social-status-experiments2.csv", sep=",") 
+
+
+d0$disfavoured.word <- as.factor(as.character(d0$disfavoured.word))
+d0$participantID <- as.factor(as.character(d0$participantID))
+d0$group <- as.factor(as.character(d0$group))
+d0$session.order <- as.factor(as.character(d0$session.order))
+d0$interlocutor.SES <- as.factor(as.character(d0$interlocutor.SES))
+
+d.exp2 <- d0 %>%
+  filter(experiment == "experiment 2")
+
+v4 <- d.exp2 %>%
+  dplyr::group_by(stimuli.order,interlocutor.SES) %>%
+  dplyr::summarise(entrainment.m = mean(entrained)*100,
+                   entrainment.sd = sd(entrained)*100,
+                   N = n(),
+                   entrainment.se = entrainment.sd/sqrt(n()))
+
+lines <- c("H" = "solid", "L" = "longdash")
+stimuli.plot <- ggplot(v4, aes(x=stimuli.order, y=entrainment.m, group=interlocutor.SES)) +
+  labs(y="proportion of lexical entrainment (%)", x="stimuli order") +
+  ylim(0,50) +
+  theme_minimal() + theme(legend.position = "bottom") +
+  geom_point(position=position_dodge(.5)) +
+  geom_line(aes(linetype=interlocutor.SES), position=position_dodge(.5)) +
+  scale_linetype_manual(values=lines, name="social status", labels=c("high", "low")) +
+  #scale_color_manual(values=c("#333399", "#d0d2ef")) +
+  scale_x_continuous(labels=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16),breaks=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16)) +
+  #facet_grid()+
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+  geom_errorbar(aes(ymax=entrainment.m+entrainment.se,ymin=entrainment.m-entrainment.se, width=.2), position=position_dodge(.5), alpha=.5)
+ggsave("stimuli-order.jpg", width = 5, height = 5)
+```
+
+There seem to be an effect of stimuli order. 
+```{r}
+m0.3 <- glmer(entrained ~ 1 +(1|participantID)+(1|disfavoured.word), data = d.exp2, family = "binomial")
+m1.3 <- glmer(entrained ~stimuli.order+(1|participantID)+(1|disfavoured.word), data = d.exp2, family = "binomial")
+anova(m0.3, m1.3)
+summary(m1.3)
+#plot_model(m1.3)
+plot_model(m1.3, type="eff")
+```
+
+Is there also an effect of interlocutors' social status?
+```{r}
+#m2.3 <- glmer(entrained ~interlocutor.SES*stimuli.order+(1 + interlocutor.SES |participantID)+(1|disfavoured.word), data = d.exp2, family = "binomial") failed to converge
+m2.3 <- glmer(entrained ~interlocutor.SES*stimuli.order+(1|participantID)+(1|disfavoured.word), data = d.exp2, family = "binomial")
+anova(m1.3, m2.3)
+m3.3 <- glmer(entrained ~interlocutor.SES*group+stimuli.order+session.order+(1|participantID)+(1|disfavoured.word), data = d.exp2, family = "binomial")
+anova(m2.3, m3.3) 
+summary(m3.3)
+```
+
+Participants entrain less and less as the the session unfolds (p<.001). 

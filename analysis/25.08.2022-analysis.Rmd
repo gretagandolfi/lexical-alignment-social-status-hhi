@@ -182,7 +182,7 @@ vis1 <- d0 %>%
                    entrainment.se = entrainment.sd/sqrt(n()))
 
 plot.order <- ggplot(vis1, aes(x=experiment, y=entrainment.m, fill=session.order)) +
-  labs(title="Lexical entrainment decreases over time", y="proportion of lexical entrainment (%)", x="experiment") +
+  labs(y="proportion of lexical entrainment (%)", x="experiment") +
   ylim(0, 50) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5)) +
