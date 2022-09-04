@@ -30,6 +30,19 @@ library(tidyr)
 
 ```
 Then I import an anonymised version of the dataset. 
+Here are my dataset variables: 
+> "disfavoured.word": target stimuli (n=32), e.g. "seat"
+> "response.lower": response provided by participants, lower case, e.g. "seat" or "chair"
+> "entrained": 1 or 0 (1 means that, in the naming trial, participants repeated what their "interlocutor" produced in the matching trial)
+> "interlocutor.SES": interlocutor social economic status ("high" or "low")
+> "session.order": the experiment included two sessions of the matching/naming task (1st or 2nd)
+> "set": stimuli were divided into two sets (1 or 2) 
+> "group": participants were assigned to two groups (prime: i.e., rating then task group and no prime: i.e., the task then rating group)
+> "participantID": random anonymised alphanumeric code associated with participants
+> "stimuli.order": order of stimuli presentation (1 to 16)
+> "f": "disfavoured.word" frequency in the norming task (spontaneous naming) (value between 0 and 1)
+> "experiment": experiment 1 or 2
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
 #import data
 d0 <- read.csv("/Users/gretagandolfi/Desktop/OneDrive - University of Edinburgh/ESR6/0DONE/_STUDY1/overall-analysis-DEF-FILES/social-status-experiments.csv", sep=",") 
