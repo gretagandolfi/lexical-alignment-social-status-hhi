@@ -10,6 +10,7 @@ output:
 First, I import all the packages I need.
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #import all the packages
+library(ggsignif)
 library(lme4)
 library(MASS)
 library(lmerTest)
@@ -27,31 +28,32 @@ library(knitr)
 library(sjmisc)
 library(sjlabelled)
 library(tidyr)
-
+library(effects)
 ```
 Then I import an anonymised version of the dataset. 
 Here are my dataset variables: 
-> "disfavoured.word": target stimuli (n=32), e.g. "seat"
-> "response.lower": response provided by participants, lower case, e.g. "seat" or "chair"
-> "entrained": 1 or 0 (1 means that, in the naming trial, participants repeated what their "interlocutor" produced in the matching trial)
-> "interlocutor.SES": interlocutor social economic status ("high" or "low")
-> "session.order": the experiment included two sessions of the matching/naming task (1st or 2nd)
-> "set": stimuli were divided into two sets (1 or 2) 
-> "group": participants were assigned to two groups (prime: i.e., rating then task group and no prime: i.e., the task then rating group)
-> "participantID": random anonymised alphanumeric code associated with participants
-> "stimuli.order": order of stimuli presentation (1 to 16)
-> "f": "disfavoured.word" frequency in the norming task (spontaneous naming) (value between 0 and 1)
-> "experiment": experiment 1 or 2
+- "disfavoured.word": target stimuli (n=32), e.g. "seat"
+- "response.lower": response provided by participants, lower case, e.g. "seat" or "chair"
+- "entrained": 1 or 0 (1 means that, in the naming trial, participants repeated what their "interlocutor" produced in the matching trial)
+- "interlocutor.SES": interlocutor social economic status ("high" or "low")
+- "session.order": the experiment included two sessions of the matching/naming task (1st or 2nd)
+- "set": stimuli were divided into two sets (1 or 2) 
+- "group": participants were assigned to two groups (prime: i.e., rating then task group and no prime: i.e., the task then rating group)
+- "participantID": random anonymised alphanumeric code associated with participants
+- "stimuli.order": order of stimuli presentation (1 to 16)
+- "f": "disfavoured.word" frequency in the norming task (spontaneous naming) (value between 0 and 1)
+- "experiment": experiment 1 or 2
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
 #import data
-d0 <- read.csv("/Users/gretagandolfi/Desktop/OneDrive - University of Edinburgh/ESR6/0DONE/_STUDY1/overall-analysis-DEF-FILES/social-status-experiments.csv", sep=",") 
+d0 <- read.csv("social-status-experiments.csv", sep=",") 
 
 d0$disfavoured.word <- as.factor(as.character(d0$disfavoured.word))
 d0$participantID <- as.factor(as.character(d0$participantID))
 d0$group <- as.factor(as.character(d0$group))
 d0$session.order <- as.factor(as.character(d0$session.order))
 d0$interlocutor.SES <- as.factor(as.character(d0$interlocutor.SES))
+
 
 #count the excluded participants
 participants.count <- d0 %>%
@@ -152,6 +154,7 @@ anova(m0.2,m1.2,m2.2,m3.2)
 
 summary(m3.2)
 plot_model(m3.2)
+#plot(allEffects(m3.2))
 ```
 In Experiment 1, participants seem to align to high and low social status interlocutors to the same extent  (p = .09). Interestingly, Experiment 2 revealed an interaction between the rating question position and interlocutors’ social status (p < .01): participants who were asked to rate the social status of their interlocutor before the main task were more likely to entrain with their high social status interlocutor than with their low social status interlocutor, while participants who were asked to rate their interlocutor social status after the main task entrained to a similar extent (25% of trials) with high and low social status interlocutors, thus replicating Experiment 1 results. In both the experiments, participants entrained more often in the first than in the second session (p < .01). 
 
@@ -167,7 +170,6 @@ vis0 <- d0 %>%
                    entrainment.se = entrainment.sd/sqrt(n()))
 
 
-
 main.plot <- ggplot(vis0, aes(x=group, y=entrainment.m, fill=interlocutor.SES)) +
   labs(title="Does interlocutors' social status modulate lexical entrainment?", subtitle="Yes, but only when participants rate the social status of their interlocutor before the main task", y="proportion of lexical entrainment (%)", x="rating position") +
   ylim(0, 50) +
@@ -179,7 +181,7 @@ main.plot <- ggplot(vis0, aes(x=group, y=entrainment.m, fill=interlocutor.SES)) 
   geom_bar(stat = "identity",position = "dodge", width = .5, alpha=.6) +
   theme(legend.position="bottom") +
   geom_errorbar(aes(ymax=entrainment.m+entrainment.se,ymin=entrainment.m-entrainment.se, width=.2), position=position_dodge(.5)) 
-
+  
 #ggsave("plot-amlap-bar.jpg", width = 8, height = 6)
 ```
 
@@ -204,6 +206,11 @@ plot.order <- ggplot(vis1, aes(x=experiment, y=entrainment.m, fill=session.order
    theme(legend.position="bottom") +
   geom_errorbar(aes(ymax=entrainment.m+entrainment.se,ymin=entrainment.m-entrainment.se, width=.2), position=position_dodge(.5)) 
 #ggsave("plot-order-amlap-bar.jpg", width = 5, height = 5)
+
+
+m.session <-  glmer(entrained~session.order*experiment+(1|participantID)+(1|disfavoured.word), data =d0, family ="binomial")
+summary(m.session)
+#plot(allEffects(m.session))
 ```
 
 Images can be found in the current folder.
