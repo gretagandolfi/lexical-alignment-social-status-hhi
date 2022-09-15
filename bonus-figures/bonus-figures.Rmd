@@ -15,7 +15,7 @@ library(sjPlot)
 library(dplyr)
 library(effects)
 
-d0 <- read.csv("/Users/gretagandolfi/Desktop/OneDrive - University of Edinburgh/ESR6/0DONE/_STUDY1/overall-analysis-DEF-FILES/social-status-experiments2.csv", sep=",") 
+d0 <- read.csv("status-experiments.csv", sep=",") 
 
 d0$disfavoured.word <- as.factor(as.character(d0$disfavoured.word))
 d0$participantID <- as.factor(as.character(d0$participantID))
@@ -34,7 +34,7 @@ v2 <- d0 %>%
 
 ```{r}
 violin.plot <- ggplot(v2, aes(x=group, y=entrainment.m, line=interlocutor.SES)) + 
-  geom_violin(trim=TRUE,position=position_dodge(.5), aes(fill=social.status), alpha=.5)+
+  geom_violin(trim=TRUE,position=position_dodge(.5), aes(fill=interlocutor.SES), alpha=.5)+
   labs(title="Lexical entrainment ~ Social status (* Rating Position)", y="Proportion of lexical entrainment (%)", x="Rating position") +
   scale_fill_manual(values=c("#333399", "#d0d2ef"), name = "Social Status", labels = c("High", "Low")) +
   geom_boxplot(width=0.1, position=position_dodge(.5), outlier.shape = NA, fatten = NULL)+
