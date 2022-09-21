@@ -1,7 +1,7 @@
 ---
 title: 'Social Status, Language Use, and Context: Insights from Lexical Entrainment'
 author: "Greta Gandolfi"
-date: "07.09.2022"
+date: "21.09.2022"
 output:
   html_document:
     df_print: paged
@@ -170,7 +170,7 @@ vis0 <- d0 %>%
                    entrainment.se = entrainment.sd/sqrt(n()))
 
 
-main.plot <- ggplot(vis0, aes(x=group, y=entrainment.m, fill=interlocutor.SES)) +
+ggplot(vis0, aes(x=group, y=entrainment.m, fill=interlocutor.SES)) +
   labs(title="Does interlocutors' social status modulate lexical entrainment?", subtitle="Yes, but only when participants rate the social status of their interlocutor before the main task", y="proportion of lexical entrainment (%)", x="rating position") +
   ylim(0, 50) +
   theme_minimal() +
@@ -187,7 +187,7 @@ main.plot <- ggplot(vis0, aes(x=group, y=entrainment.m, fill=interlocutor.SES)) 
 
 ---
 
-**Additional findings: Attention (Session Order)**
+**Additional findings: Session Order**
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 vis1 <- d0 %>%
   dplyr::group_by(experiment, session.order) %>%
@@ -196,7 +196,7 @@ vis1 <- d0 %>%
                    N = n(),
                    entrainment.se = entrainment.sd/sqrt(n()))
 
-plot.order <- ggplot(vis1, aes(x=experiment, y=entrainment.m, fill=session.order)) +
+ggplot(vis1, aes(x=experiment, y=entrainment.m, fill=session.order)) +
   labs(y="proportion of lexical entrainment (%)", x="experiment") +
   ylim(0, 50) +
   theme_minimal() +
@@ -208,10 +208,89 @@ plot.order <- ggplot(vis1, aes(x=experiment, y=entrainment.m, fill=session.order
 #ggsave("plot-order-amlap-bar.jpg", width = 5, height = 5)
 
 
-m.session <-  glmer(entrained~session.order*experiment+(1|participantID)+(1|disfavoured.word), data =d0, family ="binomial")
+m0.3 <-  glmer(entrained~session.order*experiment+(1|participantID)+(1|disfavoured.word), data =d0, family ="binomial")
 summary(m.session)
 #plot(allEffects(m.session))
 ```
 
-Images can be found in the current folder.
+**Additional findings: stimuli order**
+Visualisation
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+v2 <- d.exp2  %>%
+  dplyr::group_by(stimuli.order, interlocutor.SES, group) %>%
+  dplyr::summarise(entrainment.m = mean(entrained)*100,
+                   entrainment.sd = sd(entrained)*100,
+                   N = n(),
+                   entrainment.se = entrainment.sd/sqrt(n()))
 
+
+ggplot(v2, aes(y=entrainment.m, x=stimuli.order, color=interlocutor.SES)) + 
+  geom_point(position=position_dodge(.5)) + 
+  geom_line() + 
+  scale_color_brewer(palette = "Paired", 
+                      name = "social status", 
+                      labels = c("high", "low")) +
+  ylim(0,50) +
+  scale_x_continuous(breaks = seq(0, 16, 2)) +
+  facet_wrap(vars(group)) +
+  labs(y="proportion of lexical entrainment (%)", x="stimuli order") +
+  geom_errorbar(aes(ymax=entrainment.m+entrainment.se,ymin=entrainment.m-entrainment.se, width=.2), position=position_dodge(.5)) +
+  theme_minimal()
+
+#ggsave("plot-stim-order-xprag-bar.png",width = 6, height = 6)
+```
+
+Model
+```{r}
+d.exp2$stimuli.order <- scale((d0$stimuli.order), scale=FALSE)
+contrasts(d.exp2$interlocutor.SES) <- c(0.5,-0.5) 
+
+m0.4 <- glmer(entrained ~ 1 +(1+interlocutor.SES|participantID)+(1|disfavoured.word), data = d.exp2, family ="binomial")
+m1.4 <- glmer(entrained ~ interlocutor.SES +(1+interlocutor.SES|participantID)+(1|disfavoured.word), data = d.exp2, family ="binomial")
+m2.4 <- glmer(entrained ~ stimuli.order*interlocutor.SES +(1+interlocutor.SES|participantID)+(1|disfavoured.word), data = d.exp2, family ="binomial")
+anova(m0.4,m1.4, m2.4)
+summary(m2.4)
+```
+
+** Additional findings: participants' gender **
+Visualisation
+```{r}
+d1 <- d_exp1 <- read.csv("/Users/gretagandolfi/Desktop/OneDrive - University of Edinburgh/ESR6/0DONE/_STUDY1/xprag-abstract/social-status-experiments-gender-info.csv")
+d1$participantID <- as.factor(as.character(d1$prolific_id))
+d1$interlocutor.SES <- as.factor(as.character(d1$condition))
+d1$stimuli.order <- as.factor(as.character(d1$randomBlock))
+d1$gender.participant <- as.factor(d1$gender_participant)
+d1$rating.position <- as.factor(as.character(d1$group))
+d1 <- d1 %>% 
+  mutate(rating.position = if_else(rating.position == "prime", "rating, then main task", "main task, then rating"))
+  
+v3 <- d1 %>%
+  dplyr::group_by(rating.position, social.status, experiment, gender.participant) %>%
+  dplyr::summarise(entrainment.m = mean(entrained)*100,
+  entrainment.sd = sd(entrained)*100,
+  N = n()/15,
+  entrainment.se = entrainment.sd/sqrt(n()))
+
+ggplot(v3, aes(x=gender.participant, y=entrainment.m, fill=social.status)) +
+labs(y="proportion of lexical entrainment (%)", x="participants' gender") +
+ylim(0, 50) +
+theme_minimal() +
+scale_fill_brewer(palette = "BuPu", name = "social status", labels = c("high", "low")) +
+facet_wrap(experiment ~ rating.position, drop=TRUE) +
+geom_bar(stat = "identity",position = "dodge", width = .5) +
+theme(legend.position="bottom") +
+geom_errorbar(aes(ymax=entrainment.m+entrainment.se,ymin=entrainment.m-entrainment.se, width=.2), position=position_dodge(.5))
+
+#ggsave("plot-gender-xprag-bar.jpg", , width = 10, height = 4)
+```
+
+Model
+```{r}
+contrasts(d1$interlocutor.SES) <- c(0.5,-0.5) 
+contrasts(d1$gender.participant) <- c(-05,0.5)
+m0.5 <- glmer(entrained ~ 1 +(1+condition|prolific_id)+(1|label), data = d1, family ="binomial")
+m1.5 <- glmer(entrained ~ condition +(1+condition|prolific_id)+(1|label), data = d1, family ="binomial")
+m2.5 <- glmer(entrained ~ condition*gender.participant +(1+condition|prolific_id)+(1|label), data = d1, family ="binomial")
+anova(m0.5,m1.5, m2.5)
+summary(m2.4)
+```
