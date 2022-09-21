@@ -46,14 +46,16 @@ Here are my dataset variables:
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
 #import data
-d0 <- read.csv("social-status-experiments.csv", sep=",") 
-
-d0$disfavoured.word <- as.factor(as.character(d0$disfavoured.word))
-d0$participantID <- as.factor(as.character(d0$participantID))
-d0$group <- as.factor(as.character(d0$group))
-d0$session.order <- as.factor(as.character(d0$session.order))
-d0$interlocutor.SES <- as.factor(as.character(d0$interlocutor.SES))
-
+d0 <- read.csv("social-status-experiments.csv") 
+d0$participantID <- as.factor(as.character(d0$prolific_id))
+d0$interlocutor.SES <- as.factor(as.character(d0$condition))
+d0$stimuli.order <- as.factor(as.character(d0$randomBlock))
+d0$gender.participant <- as.factor(d0$gender_participant)
+d0$f <- as.factor(d0$f1)
+d0$rating.position <- as.factor(as.character(d1$group))
+d0 <- d0 %>% 
+  mutate(rating.position = if_else(rating.position == "prime", "rating, then main task", "main task, then rating"))
+ 
 
 #count the excluded participants
 participants.count <- d0 %>%
@@ -255,16 +257,7 @@ summary(m2.4)
 ** Additional findings: participants' gender **
 Visualisation
 ```{r}
-d1 <- d_exp1 <- read.csv("social-status-experiments-gender-info.csv")
-d1$participantID <- as.factor(as.character(d1$prolific_id))
-d1$interlocutor.SES <- as.factor(as.character(d1$condition))
-d1$stimuli.order <- as.factor(as.character(d1$randomBlock))
-d1$gender.participant <- as.factor(d1$gender_participant)
-d1$rating.position <- as.factor(as.character(d1$group))
-d1 <- d1 %>% 
-  mutate(rating.position = if_else(rating.position == "prime", "rating, then main task", "main task, then rating"))
-  
-v3 <- d1 %>%
+v3 <- d0 %>%
   dplyr::group_by(rating.position, social.status, experiment, gender.participant) %>%
   dplyr::summarise(entrainment.m = mean(entrained)*100,
   entrainment.sd = sd(entrained)*100,
