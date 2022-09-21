@@ -255,7 +255,7 @@ summary(m2.4)
 ** Additional findings: participants' gender **
 Visualisation
 ```{r}
-d1 <- d_exp1 <- read.csv("/Users/gretagandolfi/Desktop/OneDrive - University of Edinburgh/ESR6/0DONE/_STUDY1/xprag-abstract/social-status-experiments-gender-info.csv")
+d1 <- d_exp1 <- read.csv("social-status-experiments-gender-info.csv")
 d1$participantID <- as.factor(as.character(d1$prolific_id))
 d1$interlocutor.SES <- as.factor(as.character(d1$condition))
 d1$stimuli.order <- as.factor(as.character(d1$randomBlock))
