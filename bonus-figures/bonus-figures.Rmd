@@ -22,18 +22,18 @@ d0$participantID <- as.factor(as.character(d0$participantID))
 d0$group <- as.factor(as.character(d0$group))
 d0$session.order <- as.factor(as.character(d0$session.order))
 d0$interlocutor.SES <- as.factor(as.character(d0$interlocutor.SES))
-
+```
+Violin plots (main & order) for more informative visualisation
+```{r}
 #main plot
-v2 <- d0 %>%
+v4 <- d0 %>%
   dplyr::group_by(experiment, interlocutor.SES, group, participantID) %>%
   dplyr::summarise(entrainment.m = mean(entrained)*100,
                    entrainment.sd = sd(entrained)*100,
                    N = n(),
                    entrainment.se = entrainment.sd/sqrt(n()))
-```
-
-```{r}
-violin.plot <- ggplot(v2, aes(x=group, y=entrainment.m, line=interlocutor.SES)) + 
+                   
+violin.plot <- ggplot(v4, aes(x=group, y=entrainment.m, line=interlocutor.SES)) + 
   geom_violin(trim=TRUE,position=position_dodge(.5), aes(fill=interlocutor.SES), alpha=.5)+
   labs(title="Lexical entrainment ~ Social status (* Rating Position)", y="Proportion of lexical entrainment (%)", x="Rating position") +
   scale_fill_manual(values=c("#333399", "#d0d2ef"), name = "Social Status", labels = c("High", "Low")) +
@@ -49,7 +49,7 @@ violin.plot <- ggplot(v2, aes(x=group, y=entrainment.m, line=interlocutor.SES)) 
 #order plot
 #order
 d0$session.order <- as.character(d0$session.order)
-v3<- d0 %>%
+v5<- d0 %>%
   dplyr::group_by(experiment, session.order, participantID) %>%
   dplyr::summarise(entrainment.m = mean(entrained)*100,
                    entrainment.sd = sd(entrained)*100,
@@ -57,7 +57,7 @@ v3<- d0 %>%
                    entrainment.se = entrainment.sd/sqrt(n()))
 
 
-violin.plot.order <- ggplot(v3, aes(x=session.order, y=entrainment.m, line=session.order)) + 
+violin.plot.order <- ggplot(v5, aes(x=session.order, y=entrainment.m, line=session.order)) + 
   geom_violin(trim=TRUE,position=position_dodge(.5), aes(fill=order), alpha=.5)+
   labs(title="Lexical entrainment ~ Session", y="Proportion of lexical entrainment (%)", x="Session") +
   scale_fill_manual(values=c("#dbedef", "#2aa6af"),  name = "Order", labels = c("First session", "Second session")) +
@@ -70,5 +70,39 @@ violin.plot.order <- ggplot(v3, aes(x=session.order, y=entrainment.m, line=sessi
 
 #ggsave("violin-plot-order-amlap.jpg", width = 6, height = 4)
 ```
+Individual differences plot
+```{r}
+d.exp2.eff <- d0[d0$group == 'rating, then main task']
+v6 <- d.exp2.eff  %>%
+  dplyr::group_by(interlocutor.SES, participantID) %>%
+  dplyr::summarise(entrainment.m = mean(entrained)*100,
+                   entrainment.sd = sd(entrained)*100,
+                   N = n(),
+                   entrainment.se = entrainment.sd/sqrt(n()))
 
 
+ggplot(v3, aes(x=interlocutor.SES, y=entrainment.m, group=participantID)) + geom_point() + geom_line()  + facet_wrap(vars(participantID))
+
+#ggsave("ind-diff-plot.png",width = 50, height = 40, limitsize = FALSE)
+```
+Density plot
+```{r}
+v2 <- d0 %>%
+  dplyr::group_by(experiment, interlocutor.SES, group, participantID) %>%
+  dplyr::summarise(entrainment.m = mean(entrained)*100,
+                   entrainment.sd = sd(entrained)*100,
+                   N = n(),
+                   entrainment.se = entrainment.sd/sqrt(n()))
+ggplot(v2, aes(fill = interlocutor.SES, x = entrainment.m)) +
+    geom_density(color="#7c807d", alpha=0.5) +
+    labs(x="proportion of lexical entrainment (%)", y="density") +
+    scale_fill_brewer(palette = "Paired", 
+                      name = "social status", 
+                      labels = c("high", "low")) +
+    facet_wrap(experiment ~ group, drop = TRUE) +
+    theme_minimal()
+  #geom_vline(data=v2, aes(xintercept=median(entrainment.m), color=interlocutor.SES), linetype="dashed")
+
+
+#ggsave("density-plot.jpg", width = 10, height = 4)
+```
