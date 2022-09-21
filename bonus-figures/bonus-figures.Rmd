@@ -81,19 +81,19 @@ v6 <- d.exp2.eff  %>%
                    entrainment.se = entrainment.sd/sqrt(n()))
 
 
-ggplot(v3, aes(x=interlocutor.SES, y=entrainment.m, group=participantID)) + geom_point() + geom_line()  + facet_wrap(vars(participantID))
+ggplot(v6, aes(x=interlocutor.SES, y=entrainment.m, group=participantID)) + geom_point() + geom_line()  + facet_wrap(vars(participantID))
 
 #ggsave("ind-diff-plot.png",width = 50, height = 40, limitsize = FALSE)
 ```
 Density plot
 ```{r}
-v2 <- d0 %>%
+v7 <- d0 %>%
   dplyr::group_by(experiment, interlocutor.SES, group, participantID) %>%
   dplyr::summarise(entrainment.m = mean(entrained)*100,
                    entrainment.sd = sd(entrained)*100,
                    N = n(),
                    entrainment.se = entrainment.sd/sqrt(n()))
-ggplot(v2, aes(fill = interlocutor.SES, x = entrainment.m)) +
+ggplot(v7, aes(fill = interlocutor.SES, x = entrainment.m)) +
     geom_density(color="#7c807d", alpha=0.5) +
     labs(x="proportion of lexical entrainment (%)", y="density") +
     scale_fill_brewer(palette = "Paired", 
