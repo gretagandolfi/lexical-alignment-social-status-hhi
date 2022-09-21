@@ -46,12 +46,11 @@ Here are my dataset variables:
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
 #import data
-d0 <- read.csv("social-status-experiments.csv") 
+d0 <- read.csv("social-status-experiments.csv", sep=",") 
 d0$participantID <- as.factor(as.character(d0$prolific_id))
 d0$interlocutor.SES <- as.factor(as.character(d0$condition))
 d0$stimuli.order <- as.factor(as.character(d0$randomBlock))
 d0$gender.participant <- as.factor(d0$gender_participant)
-d0$f <- as.factor(d0$f1)
 d0$rating.position <- as.factor(as.character(d1$group))
 d0 <- d0 %>% 
   mutate(rating.position = if_else(rating.position == "prime", "rating, then main task", "main task, then rating"))
